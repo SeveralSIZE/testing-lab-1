@@ -5,22 +5,17 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.testinglab1.enums.ProductCategory;
+import org.example.testinglab1.enums.DishCategory;
 import org.example.testinglab1.enums.Flag;
-import org.example.testinglab1.enums.Readiness;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
-@Table(name = "products")
+@Table(name = "dishes")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Product {
+public class Dish {
 
     @Id
     @Column(name = "id")
@@ -31,7 +26,7 @@ public class Product {
     private String name;
 
     @ElementCollection
-    @CollectionTable(name = "product_photos", joinColumns = @JoinColumn(name = "product_id"))
+    @CollectionTable(name = "dish_photos", joinColumns = @JoinColumn(name = "dish_id"))
     @Column(name = "photo_url")
     private List<String> photos = new ArrayList<>();
 
@@ -47,19 +42,15 @@ public class Product {
     @Column(name = "carbohydrates", nullable = false)
     private Double carbohydrates;
 
-    @Column(name = "composition", columnDefinition = "TEXT")
-    private String composition;
+    @Column(name = "portion_size", nullable = false)
+    private Double portionSize;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "category", nullable = false)
-    private ProductCategory category;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "readiness", nullable = false)
-    private Readiness readiness;
+    private DishCategory category;
 
     @ElementCollection
-    @CollectionTable(name = "product_flags", joinColumns = @JoinColumn(name = "product_id"))
+    @CollectionTable(name = "dish_flag", joinColumns = @JoinColumn(name = "dish_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "flag")
     private Set<Flag> flags = new HashSet<>();
@@ -69,6 +60,9 @@ public class Product {
 
     @Column
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "dish", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DishProduct> ingredients = new ArrayList<>();
 
     @PrePersist
     private void prePersist() {
