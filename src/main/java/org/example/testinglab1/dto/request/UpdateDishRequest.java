@@ -13,8 +13,7 @@ import java.util.UUID;
 
 @Data
 @NoArgsConstructor
-public class CreateDishRequest {
-    @NotBlank
+public class UpdateDishRequest {
     @Size(min = 2, max = 255)
     private String name;
 
@@ -33,16 +32,13 @@ public class CreateDishRequest {
     @PositiveOrZero
     private Double carbohydrates;
 
-    @NotNull
     @Positive
     private Double portionSize;
 
-    @NotNull
     private DishCategory category;
 
     private Set<Flag> flags;
 
-    @NotNull
     @Size(min = 1)
     @Valid
     private List<IngredientRequest> ingredients;

@@ -1,20 +1,18 @@
 package org.example.testinglab1.dto.request;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.testinglab1.enums.DishCategory;
 import org.example.testinglab1.enums.Flag;
+import org.example.testinglab1.enums.ProductCategory;
+import org.example.testinglab1.enums.Readiness;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
-public class CreateDishRequest {
-    @NotBlank
+public class UpdateProductRequest {
     @Size(min = 2, max = 255)
     private String name;
 
@@ -24,26 +22,23 @@ public class CreateDishRequest {
     @PositiveOrZero
     private Double calories;
 
-    @PositiveOrZero
+    @DecimalMin("0.0")
+    @DecimalMax("100.0")
     private Double proteins;
 
-    @PositiveOrZero
+    @DecimalMin("0.0")
+    @DecimalMax("100.0")
     private Double fats;
 
-    @PositiveOrZero
+    @DecimalMin("0.0")
+    @DecimalMax("100.0")
     private Double carbohydrates;
 
-    @NotNull
-    @Positive
-    private Double portionSize;
+    private String composition;
 
-    @NotNull
-    private DishCategory category;
+    private ProductCategory category;
+
+    private Readiness readiness;
 
     private Set<Flag> flags;
-
-    @NotNull
-    @Size(min = 1)
-    @Valid
-    private List<IngredientRequest> ingredients;
 }

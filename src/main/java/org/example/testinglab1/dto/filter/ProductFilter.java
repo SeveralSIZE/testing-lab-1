@@ -10,7 +10,8 @@ import java.util.Set;
 
 @Data
 public class ProductFilter {
-    private ProductCategory category;
-    private Readiness readiness;
+    private String name;
+    private Set<ProductCategory> categories;
+    private Set<Readiness> readiness;
     private Set<Flag> flags;
 }
