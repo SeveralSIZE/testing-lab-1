@@ -27,7 +27,6 @@ public class ProductController {
             Pageable pageable,
             ProductFilter filter
     ){
-        log.info("GET /products - filter: {}, pageable: {}", filter, pageable);
         return ResponseEntity.ok(productService.getAll(pageable, filter));
     }
 

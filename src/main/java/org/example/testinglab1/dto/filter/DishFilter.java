@@ -9,6 +9,6 @@ import java.util.Set;
 @Data
 public class DishFilter {
     private String name;
-    private DishCategory category;
+    private Set<DishCategory> categories;
     private Set<Flag> flags;
 }

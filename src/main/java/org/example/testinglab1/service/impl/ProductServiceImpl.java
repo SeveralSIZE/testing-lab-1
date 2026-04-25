@@ -1,6 +1,7 @@
 package org.example.testinglab1.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.testinglab1.dto.filter.ProductFilter;
 import org.example.testinglab1.dto.request.CreateProductRequest;
 import org.example.testinglab1.dto.request.UpdateProductRequest;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {

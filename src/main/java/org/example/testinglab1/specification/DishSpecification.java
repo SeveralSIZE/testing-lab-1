@@ -16,13 +16,18 @@ public class DishSpecification {
         var specificationPredicates = new ArrayList<Specification<Dish>>();
         if(filter == null) return Specification.allOf();
 
-        if(filter.getName() != null){
-            specificationPredicates.add(((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("name"), filter.getName())));
+        if (filter.getName() != null && !filter.getName().isBlank()) {
+            specificationPredicates.add((root, query, cb) ->
+                    cb.like(cb.lower(root.get("name")), "%" + filter.getName().toLowerCase() + "%"));
         }
-        if(filter.getCategory() != null){
-            specificationPredicates.add(((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("category"), filter.getCategory())));
+        if(filter.getCategories() != null && !filter.getCategories().isEmpty()){
+            Specification<Dish> categorySpec = Specification.anyOf(
+                    filter.getCategories().stream()
+                            .map(category -> (Specification<Dish>)
+                                    (root, query, cb) -> cb.equal(root.get("category"), category))
+                            .toList()
+            );
+            specificationPredicates.add(categorySpec);
         }
         if(filter.getFlags() != null && !filter.getFlags().isEmpty()){
             for (Flag flag : filter.getFlags()) {
