@@ -3,10 +3,12 @@ package org.example.testinglab1.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.testinglab1.dto.filter.DishFilter;
 import org.example.testinglab1.dto.request.CreateDishRequest;
+import org.example.testinglab1.dto.request.GetDishNutritionRequest;
 import org.example.testinglab1.dto.request.IngredientRequest;
 import org.example.testinglab1.dto.request.UpdateDishRequest;
 import org.example.testinglab1.dto.response.DishFullDto;
 import org.example.testinglab1.dto.response.DishPageDto;
+import org.example.testinglab1.dto.response.NutritionDto;
 import org.example.testinglab1.entity.Dish;
 import org.example.testinglab1.entity.DishProduct;
 import org.example.testinglab1.entity.Product;
@@ -35,6 +37,33 @@ public class DishServiceImpl implements DishService {
     private final DishSpecification dishSpecification;
 
     @Override
+    public NutritionDto calcNutrition(GetDishNutritionRequest request){
+        double calories = 0, proteins = 0, fats = 0, carbohydrates = 0;
+        Set<Flag> allowedFlags = new HashSet<>();
+        for (UUID id : request.getIngredientsIds()){
+            Product product = productRepository.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Продукт с id: " + id + " не найден"));
+
+            int amount = request.getIngredientsAmounts().get(request.getIngredientsIds().indexOf(id));
+
+            calories      += product.getCalories()      * amount / 100;
+            proteins      += product.getProteins()      * amount / 100;
+            fats          += product.getFats()          * amount / 100;
+            carbohydrates += product.getCarbohydrates() * amount / 100;
+
+            allowedFlags.addAll(product.getFlags());
+        }
+
+        return NutritionDto.builder()
+                .calories(calories)
+                .proteins(proteins)
+                .fats(fats)
+                .carbohydrates(carbohydrates)
+                .allowedFlags(allowedFlags)
+                .build();
+    }
+
+    @Override
     public UUID create(CreateDishRequest request) {
         String name = request.getName();
         DishCategory category = request.getCategory();
@@ -48,7 +77,6 @@ public class DishServiceImpl implements DishService {
 
         List<DishProduct> ingredients = resolveIngredients(null, request.getIngredients());
 
-        // 2.2 Автоматический расчёт КБЖУ
         NutritionValues calculated = calculateNutrition(ingredients, request.getPortionSize());
 
         Double proteins = request.getProteins() != null ? request.getProteins() : calculated.proteins();

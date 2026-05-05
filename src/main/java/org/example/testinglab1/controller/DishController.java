@@ -4,9 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.testinglab1.dto.filter.DishFilter;
 import org.example.testinglab1.dto.request.CreateDishRequest;
+import org.example.testinglab1.dto.request.GetDishNutritionRequest;
 import org.example.testinglab1.dto.request.UpdateDishRequest;
 import org.example.testinglab1.dto.response.DishFullDto;
 import org.example.testinglab1.dto.response.DishPageDto;
+import org.example.testinglab1.dto.response.NutritionDto;
 import org.example.testinglab1.service.DishService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,11 @@ public class DishController {
     @GetMapping("/{id}")
     public ResponseEntity<DishFullDto> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(dishService.getById(id));
+    }
+
+    @PostMapping("/nutrition")
+    public ResponseEntity<NutritionDto> calcNutrition(@RequestBody GetDishNutritionRequest request){
+        return ResponseEntity.ok(dishService.calcNutrition(request));
     }
 
     @PostMapping
