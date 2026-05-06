@@ -35,6 +35,11 @@ public class ProductController {
         return ResponseEntity.ok(productService.getById(id));
     }
 
+    @GetMapping("/{id}/in-use")
+    public ResponseEntity<Boolean> inUse(@PathVariable UUID id){
+        return ResponseEntity.ok(productService.inUse(id));
+    }
+
     @PostMapping
     public ResponseEntity<UUID> create(@Valid @RequestBody CreateProductRequest request){
         return ResponseEntity.ok(productService.create(request));

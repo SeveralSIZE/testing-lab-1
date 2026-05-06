@@ -15,4 +15,5 @@ public interface ProductService {
     ProductFullDto getById(UUID id);
     void deleteById(UUID id);
     void updateById(UUID id, UpdateProductRequest request);
+    Boolean inUse(UUID id);
 }

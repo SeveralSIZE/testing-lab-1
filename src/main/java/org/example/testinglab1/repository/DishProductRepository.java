@@ -9,4 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface DishProductRepository extends JpaRepository<DishProduct, UUID> {
+    boolean existsByProductId(UUID productId);
 }

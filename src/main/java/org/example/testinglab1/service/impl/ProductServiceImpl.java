@@ -11,6 +11,7 @@ import org.example.testinglab1.entity.Product;
 import org.example.testinglab1.exception.InvalidRequestException;
 import org.example.testinglab1.exception.NotFoundException;
 import org.example.testinglab1.mapper.ProductMapper;
+import org.example.testinglab1.repository.DishProductRepository;
 import org.example.testinglab1.repository.ProductRepository;
 import org.example.testinglab1.service.ProductService;
 import org.example.testinglab1.specification.ProductSpecification;
@@ -27,6 +28,12 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final ProductSpecification productSpecification;
+    private final DishProductRepository dishProductRepository;
+
+    @Override
+    public Boolean inUse(UUID id){
+        return dishProductRepository.existsByProductId(id);
+    }
 
     @Override
     public UUID create(CreateProductRequest request){
@@ -58,8 +65,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteById(UUID id){
-        productRepository.deleteById(id);
+    public void deleteById(UUID id)
+    {
+        if(!inUse(id)) productRepository.deleteById(id);
     }
 
     @Override
