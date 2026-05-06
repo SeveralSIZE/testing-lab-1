@@ -39,7 +39,8 @@ public class DishServiceImpl implements DishService {
     @Override
     public NutritionDto calcNutrition(GetDishNutritionRequest request){
         double calories = 0, proteins = 0, fats = 0, carbohydrates = 0;
-        Set<Flag> allowedFlags = new HashSet<>();
+        Set<Flag> allowedFlags = null;
+
         for (UUID id : request.getIngredientsIds()){
             Product product = productRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Продукт с id: " + id + " не найден"));
@@ -51,7 +52,11 @@ public class DishServiceImpl implements DishService {
             fats          += product.getFats()          * amount / 100;
             carbohydrates += product.getCarbohydrates() * amount / 100;
 
-            allowedFlags.addAll(product.getFlags());
+            if (allowedFlags == null) {
+                allowedFlags = new HashSet<>(product.getFlags());
+            } else {
+                allowedFlags.retainAll(product.getFlags());
+            }
         }
 
         return NutritionDto.builder()
@@ -59,7 +64,7 @@ public class DishServiceImpl implements DishService {
                 .proteins(proteins)
                 .fats(fats)
                 .carbohydrates(carbohydrates)
-                .allowedFlags(allowedFlags)
+                .allowedFlags(allowedFlags != null ? allowedFlags : new HashSet<>())
                 .build();
     }
 
