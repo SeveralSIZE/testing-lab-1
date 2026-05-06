@@ -80,6 +80,7 @@ public class DishMapper {
     private DishProductDto toDishProductDto(DishProduct dp) {
         return DishProductDto.builder()
                 .productId(dp.getProduct().getId())
+                .productName(dp.getProduct().getName())
                 .amount(dp.getAmount())
                 .build();
     }

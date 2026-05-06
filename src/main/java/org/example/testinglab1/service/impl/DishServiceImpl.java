@@ -15,7 +15,7 @@ import org.example.testinglab1.entity.Product;
 import org.example.testinglab1.enums.DishCategory;
 import org.example.testinglab1.enums.Flag;
 import org.example.testinglab1.exception.NotFoundException;
-import org.example.testinglab1.exception.InvalidMacroRatioException;
+import org.example.testinglab1.exception.InvalidRequestException;
 import org.example.testinglab1.mapper.DishMapper;
 import org.example.testinglab1.repository.DishRepository;
 import org.example.testinglab1.repository.ProductRepository;
@@ -80,6 +80,10 @@ public class DishServiceImpl implements DishService {
             category = macroCategory.category();
         }
 
+        if(category == null) {
+            throw new InvalidRequestException("Невалидная категория");
+        }
+
         List<DishProduct> ingredients = resolveIngredients(null, request.getIngredients());
 
         NutritionValues calculated = calculateNutrition(ingredients, request.getPortionSize());
@@ -90,10 +94,9 @@ public class DishServiceImpl implements DishService {
         Double calories = request.getCalories() != null ? request.getCalories() : calculated.calories();
 
         if (proteins + fats + carbohydrates > 100) {
-            throw new InvalidMacroRatioException("Сумма бжу больше 100 грамм");
+            throw new InvalidRequestException("Сумма бжу больше 100 грамм");
         }
 
-        // 2.4 Валидация и фильтрация флагов
         Set<Flag> flags = validateAndFilterFlags(request.getFlags(), ingredients);
 
         Dish dish = dishMapper.toEntity(request, name, category, calories, proteins, fats, carbohydrates, flags);
@@ -158,7 +161,7 @@ public class DishServiceImpl implements DishService {
         Double calories = request.getCalories() != null ? request.getCalories() : calculated.calories();
 
         if (proteins + fats + carbohydrates > 100) {
-            throw new InvalidMacroRatioException("Сумма БЖУ на 100 грамм не может превышать 100");
+            throw new InvalidRequestException("Сумма БЖУ на 100 грамм не может превышать 100");
         }
 
         // 2.4 Пересчёт флагов при изменении состава

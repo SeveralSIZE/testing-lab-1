@@ -9,5 +9,6 @@ import java.util.UUID;
 @Builder
 public class DishProductDto {
     private UUID productId;
+    private String productName;
     private Double amount;
 }

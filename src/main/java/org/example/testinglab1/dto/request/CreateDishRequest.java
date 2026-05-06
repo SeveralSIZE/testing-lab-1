@@ -37,7 +37,6 @@ public class CreateDishRequest {
     @Positive
     private Double portionSize;
 
-    @NotNull
     private DishCategory category;
 
     private Set<Flag> flags;

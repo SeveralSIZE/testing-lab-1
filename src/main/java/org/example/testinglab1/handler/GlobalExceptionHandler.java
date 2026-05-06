@@ -1,7 +1,7 @@
 package org.example.testinglab1.handler;
 
 import org.example.testinglab1.exception.NotFoundException;
-import org.example.testinglab1.exception.InvalidMacroRatioException;
+import org.example.testinglab1.exception.InvalidRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,8 +15,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
-    @ExceptionHandler(InvalidMacroRatioException.class)
-    public ResponseEntity<String> handleInvalidMacroRatio(InvalidMacroRatioException exception){
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<String> handleInvalidMacroRatio(InvalidRequestException exception){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 }

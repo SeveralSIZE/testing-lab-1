@@ -8,7 +8,7 @@ import org.example.testinglab1.dto.request.UpdateProductRequest;
 import org.example.testinglab1.dto.response.ProductFullDto;
 import org.example.testinglab1.dto.response.ProductPageDto;
 import org.example.testinglab1.entity.Product;
-import org.example.testinglab1.exception.InvalidMacroRatioException;
+import org.example.testinglab1.exception.InvalidRequestException;
 import org.example.testinglab1.exception.NotFoundException;
 import org.example.testinglab1.mapper.ProductMapper;
 import org.example.testinglab1.repository.ProductRepository;
@@ -31,7 +31,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public UUID create(CreateProductRequest request){
         if(request.getProteins() + request.getFats() + request.getCarbohydrates() > 100){
-            throw new InvalidMacroRatioException("Сумма бжу больше 100 грамм");
+            throw new InvalidRequestException("Сумма бжу больше 100 грамм");
         }
 
         Product product = productMapper.toEntity(request);
@@ -72,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
         Double carbohydrates = request.getCarbohydrates() != null ? request.getCarbohydrates() : product.getCarbohydrates();
 
         if(proteins + fats + carbohydrates > 100){
-            throw new InvalidMacroRatioException("Сумма бжу больше 100");
+            throw new InvalidRequestException("Сумма бжу больше 100");
         }
 
         if (request.getName() != null){
