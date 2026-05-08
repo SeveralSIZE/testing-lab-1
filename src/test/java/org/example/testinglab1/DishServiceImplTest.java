@@ -113,7 +113,7 @@ public class DishServiceImplTest {
         assertThat(result.getCarbohydrates()).isEqualTo(0.0);
     }
 
-    // Большое количество 10000г
+    // Большое количество 1000000г
     @Test
     @DisplayName("Тест 4")
     void test4() {
@@ -122,13 +122,13 @@ public class DishServiceImplTest {
         when(productRepository.findById(id)).thenReturn(Optional.of(product));
 
         NutritionDto result = dishService.calcNutrition(buildRequest(
-                List.of(id), List.of(10000)
+                List.of(id), List.of(1000000)
         ));
 
-        assertThat(result.getCalories()).isEqualTo(20000.0);
-        assertThat(result.getProteins()).isEqualTo(1000.0);
-        assertThat(result.getFats()).isEqualTo(500.0);
-        assertThat(result.getCarbohydrates()).isEqualTo(3000.0);
+        assertThat(result.getCalories()).isEqualTo(2000000.0);
+        assertThat(result.getProteins()).isEqualTo(100000.0);
+        assertThat(result.getFats()).isEqualTo(50000.0);
+        assertThat(result.getCarbohydrates()).isEqualTo(300000.0);
     }
 
     // Несколько продуктов
@@ -171,7 +171,7 @@ public class DishServiceImplTest {
         assertThat(result.getCarbohydrates()).isEqualTo(0.0);
     }
 
-    // Проверка флагов 1
+    // Проверка одинаковых флагов
     @Test
     @DisplayName("Тест 7")
     void test7() {
@@ -192,7 +192,7 @@ public class DishServiceImplTest {
                 .containsExactly(Flag.VEGAN);
     }
 
-    // Проверка флагов 2
+    // Проверка разных флагов
     @Test
     @DisplayName("Тест 8")
     void test8() {
@@ -224,5 +224,23 @@ public class DishServiceImplTest {
         )))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessageContaining(unknownId.toString());
+    }
+
+    // Отрицательные значения
+    @Test
+    @DisplayName("Тест 10")
+    void test10() {
+        UUID id = UUID.randomUUID();
+        Product product = buildProduct(200.0, 10.0, 5.0, 30.0);
+        when(productRepository.findById(id)).thenReturn(Optional.of(product));
+
+        NutritionDto result = dishService.calcNutrition(buildRequest(
+                List.of(id), List.of(-100)
+        ));
+
+        assertThat(result.getCalories()).isEqualTo(-200.0);
+        assertThat(result.getProteins()).isEqualTo(-10.0);
+        assertThat(result.getFats()).isEqualTo(-5.0);
+        assertThat(result.getCarbohydrates()).isEqualTo(-30.0);
     }
 }

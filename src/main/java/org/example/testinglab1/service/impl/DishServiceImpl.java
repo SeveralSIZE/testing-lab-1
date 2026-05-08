@@ -93,10 +93,6 @@ public class DishServiceImpl implements DishService {
         Double carbohydrates = request.getCarbohydrates() != null ? request.getCarbohydrates() : calculated.carbohydrates();
         Double calories = request.getCalories() != null ? request.getCalories() : calculated.calories();
 
-        if (proteins + fats + carbohydrates > 100) {
-            throw new InvalidRequestException("Сумма бжу больше 100 грамм");
-        }
-
         Set<Flag> flags = validateAndFilterFlags(request.getFlags(), ingredients);
 
         Dish dish = dishMapper.toEntity(request, name, category, calories, proteins, fats, carbohydrates, flags);
@@ -159,10 +155,6 @@ public class DishServiceImpl implements DishService {
         Double fats = request.getFats() != null ? request.getFats() : calculated.fats();
         Double carbohydrates = request.getCarbohydrates() != null ? request.getCarbohydrates() : calculated.carbohydrates();
         Double calories = request.getCalories() != null ? request.getCalories() : calculated.calories();
-
-        if (proteins + fats + carbohydrates > 100) {
-            throw new InvalidRequestException("Сумма БЖУ на 100 грамм не может превышать 100");
-        }
 
         // 2.4 Пересчёт флагов при изменении состава
         Set<Flag> requestedFlags = request.getFlags() != null ? request.getFlags() : dish.getFlags();
