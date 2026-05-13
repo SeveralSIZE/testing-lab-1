@@ -225,22 +225,4 @@ public class DishServiceImplTest {
                 .isInstanceOf(NotFoundException.class)
                 .hasMessageContaining(unknownId.toString());
     }
-
-    // Отрицательные значения
-    @Test
-    @DisplayName("Тест 10")
-    void test10() {
-        UUID id = UUID.randomUUID();
-        Product product = buildProduct(200.0, 10.0, 5.0, 30.0);
-        when(productRepository.findById(id)).thenReturn(Optional.of(product));
-
-        NutritionDto result = dishService.calcNutrition(buildRequest(
-                List.of(id), List.of(-100)
-        ));
-
-        assertThat(result.getCalories()).isEqualTo(-200.0);
-        assertThat(result.getProteins()).isEqualTo(-10.0);
-        assertThat(result.getFats()).isEqualTo(-5.0);
-        assertThat(result.getCarbohydrates()).isEqualTo(-30.0);
-    }
 }

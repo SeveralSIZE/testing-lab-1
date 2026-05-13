@@ -1,7 +1,9 @@
 package org.example.testinglab1.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.example.testinglab1.enums.Flag;
 import org.example.testinglab1.enums.ProductCategory;
 import org.example.testinglab1.enums.Readiness;
@@ -13,6 +15,8 @@ import java.util.UUID;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductFullDto {
     private UUID id;
     private String name;

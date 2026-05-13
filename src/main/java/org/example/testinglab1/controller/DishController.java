@@ -36,7 +36,7 @@ public class DishController {
     }
 
     @PostMapping("/nutrition")
-    public ResponseEntity<NutritionDto> calcNutrition(@RequestBody GetDishNutritionRequest request){
+    public ResponseEntity<NutritionDto> calcNutrition(@Valid @RequestBody GetDishNutritionRequest request){
         return ResponseEntity.ok(dishService.calcNutrition(request));
     }
 
